@@ -1,0 +1,32 @@
+name: expense_tracker
+description: A home expense tracker app
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.19.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.5
+  intl: ^0.18.1
+  flutter_slidable: ^3.0.0
+  provider: ^6.0.5
+  google_fonts: ^5.1.0
+  fl_chart: ^0.63.0
+  
+  # PDF export
+  pdf: ^3.10.4
+  path_provider: ^2.1.1
+  open_file: ^3.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.2
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/ 

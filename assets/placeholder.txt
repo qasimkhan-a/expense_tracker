@@ -1,0 +1,2 @@
+This is a placeholder file to ensure the assets directory is included when the app is packaged.
+Future versions of the app might include icons, images, and other assets in this directory. 

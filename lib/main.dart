@@ -86,10 +86,8 @@ class MyApp extends StatelessWidget {
             contentPadding: const EdgeInsets.all(16),
           ),
         ),
-        home: const HomeScreen(),
+        home: const MainScaffold(),
         routes: {
-          '/settings': (context) => const SettingsScreen(),
-          '/history': (context) => const HistoryScreen(),
           '/export': (context) => const ExportScreen(),
         },
       ),

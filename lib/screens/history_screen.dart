@@ -32,17 +32,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void _filterExpenses() {
     final now = DateTime.now();
     final allExpenses = Provider.of<ExpensesProvider>(context, listen: false).expenses;
-    
+
     setState(() {
-      switch (_selectedFilter) {
-        case 'Today':
+      switch (_selectedFilterIndex) {
+        case 1: // Today
           _filteredExpenses = allExpenses.where((expense) {
             return expense.date.year == now.year &&
                    expense.date.month == now.month &&
                    expense.date.day == now.day;
           }).toList();
           break;
-        case 'This Week':
+        case 2: // Week
           final weekStart = now.subtract(Duration(days: now.weekday - 1));
           final weekStartDate = DateTime(weekStart.year, weekStart.month, weekStart.day);
           _filteredExpenses = allExpenses.where((expense) {
@@ -50,22 +50,36 @@ class _HistoryScreenState extends State<HistoryScreen> {
                    expense.date.isBefore(now.add(const Duration(days: 1)));
           }).toList();
           break;
-        case 'This Month':
+        case 3: // Month
           final monthStart = DateTime(now.year, now.month, 1);
           _filteredExpenses = allExpenses.where((expense) {
             return expense.date.isAfter(monthStart.subtract(const Duration(days: 1))) &&
                    expense.date.isBefore(DateTime(now.year, now.month + 1, 1));
           }).toList();
           break;
-        case 'All':
+        case 0: // All
         default:
           _filteredExpenses = List.from(allExpenses);
           break;
       }
-      
+
       // Sort expenses by date (newest first)
       _filteredExpenses.sort((a, b) => b.date.compareTo(a.date));
     });
+  }
+
+  void _openAddExpenseModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => AddExpenseModal(
+        onAddExpense: (expense) {
+          Provider.of<ExpensesProvider>(context, listen: false)
+              .addExpense(expense);
+        },
+      ),
+    );
   }
 
   void _showExpenseDetail(Expense expense) {

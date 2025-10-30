@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/currency_provider.dart';
 
-class BudgetOverview extends StatelessWidget {
+class BudgetOverview extends StatefulWidget {
   final double totalExpenses;
   final double monthlyBudget;
   final double remainingBudget;
@@ -16,118 +16,113 @@ class BudgetOverview extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<BudgetOverview> createState() => _BudgetOverviewState();
+}
+
+class _BudgetOverviewState extends State<BudgetOverview>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _progressAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _progressAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.elasticOut,
+    );
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final isOverBudget = remainingBudget < 0;
-    final progress = (totalExpenses / monthlyBudget).clamp(0.0, 1.0);
+    final isOverBudget = widget.remainingBudget < 0;
+    final progress = (widget.totalExpenses / widget.monthlyBudget).clamp(0.0, 1.0);
     final currencyProvider = Provider.of<CurrencyProvider>(context);
 
     return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF1E3B70), Color(0xFF29539B)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: Colors.black,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF1E3B70).withOpacity(0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Label
           Text(
-            'Budget Overview',
-            style: GoogleFonts.poppins(
+            'BUDGET',
+            style: GoogleFonts.inter(
+              color: Colors.white.withOpacity(0.6),
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 1.5,
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          // Budget Amount
+          Text(
+            currencyProvider.formatAmount(widget.monthlyBudget),
+            style: GoogleFonts.inter(
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 42,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Monthly Budget',
-                style: GoogleFonts.poppins(
-                  color: Colors.white.withOpacity(0.8),
-                  fontSize: 14,
-                ),
-              ),
-              Text(
-                currencyProvider.formatAmount(monthlyBudget),
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ],
+          const SizedBox(height: 20),
+
+          // Progress Bar
+          AnimatedBuilder(
+            animation: _progressAnimation,
+            builder: (context, child) {
+              return Stack(
+                children: [
+                  // Background bar
+                  Container(
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                    ),
+                  ),
+                  // Fill bar
+                  FractionallySizedBox(
+                    widthFactor: progress * _progressAnimation.value,
+                    child: Container(
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: isOverBudget ? const Color(0xFFEF4444) : Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Spent',
-                style: GoogleFonts.poppins(
-                  color: Colors.white.withOpacity(0.8),
-                  fontSize: 14,
-                ),
-              ),
-              Text(
-                currencyProvider.formatAmount(totalExpenses),
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: LinearProgressIndicator(
-              value: progress,
-              minHeight: 8,
-              backgroundColor: Colors.white.withOpacity(0.2),
-              valueColor: AlwaysStoppedAnimation<Color>(
-                isOverBudget ? Colors.red : Colors.green.shade300,
-              ),
+          const SizedBox(height: 12),
+
+          // Remaining text
+          Text(
+            isOverBudget
+                ? '${currencyProvider.formatAmount(widget.remainingBudget.abs())} over'
+                : '${currencyProvider.formatAmount(widget.remainingBudget)} left',
+            style: GoogleFonts.inter(
+              color: isOverBudget
+                  ? const Color(0xFFEF4444)
+                  : Colors.white.withOpacity(0.8),
+              fontSize: 14,
             ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                isOverBudget ? 'Over Budget' : 'Remaining',
-                style: GoogleFonts.poppins(
-                  color: Colors.white.withOpacity(0.8),
-                  fontSize: 14,
-                ),
-              ),
-              Text(
-                isOverBudget
-                    ? '${currencyProvider.currencySymbol}-${(totalExpenses - monthlyBudget).toStringAsFixed(2)}'
-                    : currencyProvider.formatAmount(remainingBudget),
-                style: GoogleFonts.poppins(
-                  color: isOverBudget
-                      ? Colors.red.shade300
-                      : Colors.green.shade300,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ],
           ),
         ],
       ),

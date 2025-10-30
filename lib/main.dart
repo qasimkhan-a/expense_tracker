@@ -84,9 +84,6 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home: const MainScaffold(),
-        routes: {
-          '/export': (context) => const ExportScreen(),
-        },
       ),
     );
   }

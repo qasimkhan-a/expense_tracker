@@ -13,9 +13,12 @@ dependencies:
   intl: ^0.18.1
   flutter_slidable: ^3.0.0
   provider: ^6.0.5
-  google_fonts: ^5.1.0
-  fl_chart: ^0.63.0
-  
+  google_fonts: ^6.1.0
+
+  # Animations and interactions
+  flutter_animate: ^4.5.0
+  flutter_vibrate: ^1.3.0
+
   # PDF export
   pdf: ^3.10.4
   path_provider: ^2.1.1

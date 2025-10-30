@@ -34,54 +34,55 @@ class MyApp extends StatelessWidget {
         title: 'Expense Tracker',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: const Color(0xFF1E3B70),
-          scaffoldBackgroundColor: const Color(0xFFF5F7FA),
-          appBarTheme: const AppBarTheme(
+          primaryColor: const Color(0xFF000000),
+          scaffoldBackgroundColor: const Color(0xFFFFFFFF),
+          appBarTheme: AppBarTheme(
             backgroundColor: Colors.white,
             elevation: 0,
-            iconTheme: IconThemeData(color: Color(0xFF1E3B70)),
-            titleTextStyle: TextStyle(
-              color: Color(0xFF1E3B70),
+            iconTheme: const IconThemeData(color: Colors.black),
+            titleTextStyle: GoogleFonts.inter(
+              color: Colors.black,
               fontSize: 20,
               fontWeight: FontWeight.bold,
+              letterSpacing: -0.5,
             ),
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
-          textTheme: GoogleFonts.poppinsTextTheme(
+          textTheme: GoogleFonts.interTextTheme(
             Theme.of(context).textTheme,
           ),
           colorScheme: ColorScheme.fromSwatch().copyWith(
-            primary: const Color(0xFF1E3B70),
-            secondary: const Color(0xFF29539B),
+            primary: const Color(0xFF000000),
+            secondary: const Color(0xFF000000),
+          ),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            backgroundColor: Colors.white,
+            selectedItemColor: Colors.black,
+            unselectedItemColor: Color(0xFF999999),
+            elevation: 0,
+            type: BottomNavigationBarType.fixed,
+            selectedLabelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+            unselectedLabelStyle: TextStyle(fontSize: 0),
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF1E3B70),
+              backgroundColor: Colors.black,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
               elevation: 0,
+              padding: const EdgeInsets.symmetric(vertical: 16),
             ),
           ),
           inputDecorationTheme: InputDecorationTheme(
             filled: true,
-            fillColor: Colors.white,
+            fillColor: const Color(0xFFF5F5F5),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.shade300),
+              borderSide: BorderSide.none,
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.shade300),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF1E3B70), width: 2),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
-            ),
+            contentPadding: const EdgeInsets.all(16),
           ),
         ),
         home: const HomeScreen(),

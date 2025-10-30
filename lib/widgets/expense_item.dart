@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../models/expense.dart';
 import '../providers/currency_provider.dart';
@@ -20,7 +21,7 @@ class ExpenseItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currencyProvider = Provider.of<CurrencyProvider>(context);
-    
+
     return Slidable(
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
@@ -30,17 +31,16 @@ class ExpenseItem extends StatelessWidget {
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
             icon: Icons.delete,
-            label: 'Delete',
             borderRadius: const BorderRadius.horizontal(right: Radius.circular(12)),
           ),
         ],
       ),
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        shape: RoundedRectangleBorder(
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F5F5),
           borderRadius: BorderRadius.circular(12),
         ),
-        elevation: 2,
         child: InkWell(
           onTap: () {
             if (onTap != null) {
@@ -56,60 +56,65 @@ class ExpenseItem extends StatelessWidget {
           },
           borderRadius: BorderRadius.circular(12),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: expense.category.color.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    expense.category.icon,
-                    color: expense.category.color,
-                    size: 24,
-                  ),
-                ),
-                const SizedBox(width: 16),
+                // Left side - Title and subtitle (70%)
                 Expanded(
+                  flex: 70,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Title
                       Text(
                         expense.title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                        style: GoogleFonts.inter(
                           fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
+                      // Date • Category
                       Row(
                         children: [
                           Text(
                             expense.formattedDate,
-                            style: TextStyle(
-                              color: Colors.grey.shade600,
-                              fontSize: 14,
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: const Color(0xFF666666),
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: expense.category.color.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 6),
                             child: Text(
-                              expense.category.name.toUpperCase(),
-                              style: TextStyle(
-                                color: expense.category.color,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
+                              '•',
+                              style: GoogleFonts.inter(
+                                fontSize: 13,
+                                color: const Color(0xFF666666),
                               ),
+                            ),
+                          ),
+                          // Colored dot indicator
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: expense.category.color,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text(
+                              expense.category.name[0].toUpperCase() +
+                                  expense.category.name.substring(1),
+                              style: GoogleFonts.inter(
+                                fontSize: 13,
+                                color: const Color(0xFF666666),
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
@@ -117,12 +122,18 @@ class ExpenseItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                Text(
-                  currencyProvider.formatAmount(expense.amount),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Theme.of(context).primaryColor,
+                const SizedBox(width: 16),
+                // Right side - Amount (30%)
+                Expanded(
+                  flex: 30,
+                  child: Text(
+                    currencyProvider.formatAmount(expense.amount),
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.right,
                   ),
                 ),
               ],

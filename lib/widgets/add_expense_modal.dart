@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../models/expense.dart';
 
@@ -53,7 +54,7 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF1E3B70),
+              primary: Colors.black,
               onPrimary: Colors.white,
             ),
             dialogBackgroundColor: Colors.white,
@@ -74,10 +75,10 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-        top: 20,
-        left: 16,
-        right: 16,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+        top: 8,
+        left: 24,
+        right: 24,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
       ),
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -91,34 +92,38 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Handle bar
             Center(
               child: Container(
                 width: 40,
                 height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
+                  color: const Color(0xFFE5E5E5),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            const Text(
-              'Add New Expense',
-              style: TextStyle(
-                fontSize: 20,
+
+            // Title
+            Text(
+              'Add Expense',
+              style: GoogleFonts.inter(
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1E3B70),
+                color: Colors.black,
+                letterSpacing: -0.5,
               ),
             ),
             const SizedBox(height: 20),
+
+            // Title field
             TextFormField(
               controller: _titleController,
+              style: GoogleFonts.inter(fontSize: 16),
               decoration: InputDecoration(
-                labelText: 'Title',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                prefixIcon: const Icon(Icons.title),
+                hintText: 'What did you buy?',
+                hintStyle: GoogleFonts.inter(color: const Color(0xFF999999)),
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
@@ -128,18 +133,30 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
               },
             ),
             const SizedBox(height: 16),
+
+            // Amount field (large)
             TextFormField(
               controller: _amountController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
               ],
+              style: GoogleFonts.inter(
+                fontSize: 32,
+                fontWeight: FontWeight.w600,
+              ),
               decoration: InputDecoration(
-                labelText: 'Amount',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                hintText: '0.00',
+                hintStyle: GoogleFonts.inter(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF999999),
                 ),
-                prefixIcon: const Icon(Icons.attach_money),
+                prefixText: '\$ ',
+                prefixStyle: GoogleFonts.inter(
+                  fontSize: 32,
+                  color: const Color(0xFF666666),
+                ),
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
@@ -157,47 +174,31 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
               },
             ),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: _presentDatePicker,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 16,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey.shade400,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.calendar_today),
-                          const SizedBox(width: 8),
-                          Text(
-                            DateFormat.yMd().format(_selectedDate),
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
+
+            // Date picker
+            InkWell(
+              onTap: _presentDatePicker,
+              child: InputDecorator(
+                decoration: const InputDecoration(),
+                child: Row(
+                  children: [
+                    const Icon(Icons.calendar_today, size: 20),
+                    const SizedBox(width: 12),
+                    Text(
+                      DateFormat.yMd().format(_selectedDate),
+                      style: GoogleFonts.inter(fontSize: 16),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
             const SizedBox(height: 16),
+
+            // Category dropdown
             DropdownButtonFormField<Category>(
-              decoration: InputDecoration(
-                labelText: 'Category',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                prefixIcon: Icon(_selectedCategory.icon),
-              ),
+              decoration: const InputDecoration(),
               value: _selectedCategory,
+              style: GoogleFonts.inter(fontSize: 16, color: Colors.black),
               items: Category.values.map((category) {
                 return DropdownMenuItem<Category>(
                   value: category,
@@ -206,11 +207,11 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
                       Icon(
                         category.icon,
                         color: category.color,
+                        size: 20,
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 12),
                       Text(
-                        category.name.substring(0, 1).toUpperCase() +
-                            category.name.substring(1),
+                        category.name[0].toUpperCase() + category.name.substring(1),
                       ),
                     ],
                   ),
@@ -225,24 +226,18 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
               },
             ),
             const SizedBox(height: 24),
+
+            // Submit button
             SizedBox(
               width: double.infinity,
-              height: 50,
+              height: 52,
               child: ElevatedButton(
                 onPressed: _submitForm,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1E3B70),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 0,
-                ),
-                child: const Text(
-                  'Add Expense',
-                  style: TextStyle(
+                child: Text(
+                  'Add',
+                  style: GoogleFonts.inter(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -252,4 +247,4 @@ class _AddExpenseModalState extends State<AddExpenseModal> {
       ),
     );
   }
-} 
+}

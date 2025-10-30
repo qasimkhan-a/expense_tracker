@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/expenses_provider.dart';
 import '../widgets/budget_overview.dart';
-import '../widgets/expense_chart.dart';
+import '../widgets/category_bar_chart.dart';
 import '../widgets/expense_item.dart';
 import '../widgets/add_expense_modal.dart';
 import '../models/expense.dart';
-import 'settings_screen.dart';
-import 'history_screen.dart';
-import 'export_screen.dart';
-import 'expense_detail_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);

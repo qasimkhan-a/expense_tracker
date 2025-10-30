@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../providers/expenses_provider.dart';
 import '../models/expense.dart';
 import '../widgets/expense_item.dart';
+import '../widgets/segmented_control.dart';
+import '../widgets/add_expense_modal.dart';
 import 'expense_detail_screen.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -14,7 +17,8 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  String _selectedFilter = 'All';
+  int _selectedFilterIndex = 0;
+  final List<String> _filterOptions = ['All', 'Today', 'Week', 'Month'];
   List<Expense> _filteredExpenses = [];
   
   @override

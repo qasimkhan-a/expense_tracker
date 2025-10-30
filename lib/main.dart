@@ -7,6 +7,7 @@ import 'providers/currency_provider.dart';
 import 'screens/home_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/history_screen.dart';
+import 'screens/analytics_screen.dart';
 import 'screens/export_screen.dart';
 import 'screens/expense_detail_screen.dart';
 import 'models/expense.dart';
